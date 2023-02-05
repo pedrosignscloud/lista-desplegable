@@ -1,30 +1,31 @@
-function seleccionMultip1e(e){
-    var celdaActiva=SpreadsheetApp.getActiveRange();
-    var columnaActiva=celdaActiva.getColumn()
-    var filaActiva=celdaActiva.getRow()
-    var valorActivo=e.value
-    var valorAnterior=e.oldValue
-    var celdaResultado=celdaActiva.offset(0,1)
-    var ValorAcumulado=celdaResultado.getValue()
+function seleccionMultiple(e){
+    if (!e) {
+        return;
+    }
+    let activeCell = SpreadsheetApp.getActiveRange();
+    let column = activeCell.getColumn();
+    let row = activeCell.getRow();
+    let value = e.value;
+    let previousValue = e.oldValue;
+    let resultCell = activeCell.offset(0,1);
+    let accumulatedValue = resultCell.getValue();
 
-    var busquedaDuplicados=ValorAcumulado.toString().indexOF(valorActivo)
+    let duplicateIndex = accumulatedValue.toString().indexOf(value);
 
-    if(columnaActiva==2 && filaActiva>2 ){
-        if(!valorActivo) ValorAcumulado=""
-        else if(!valorAnterior) ValorAcumulado=valorActivo
-        else if (busquedaDuplicados!=-1) ValorAcumulado=ValorAcumulado
-        else if(valorActivo!=valorAnterior){
-            ValorAcumulado=ValorAcumulado+","+valorActivo
-
-            }
-            celdaResultado.setValue(ValorAcumulado)
-
-        
-        
-    } 
-
+    if (column === 2 && row > 2) {
+        if (!value) {
+            accumulatedValue = "";
+        } else if (!previousValue) {
+            accumulatedValue = value;
+        } else if (duplicateIndex !== -1) {
+            accumulatedValue = accumulatedValue;
+        } else if (value !== previousValue) {
+            accumulatedValue = accumulatedValue + "," + value;
+        }
+        resultCell.setValue(accumulatedValue);
+    }
 }
 
 function onEdit(e){
-    seleccionMultip1e(e)
+    seleccionMultiple(e);
 }
